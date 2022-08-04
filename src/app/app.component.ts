@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { AppService } from './app.service';
 
 export interface Property {
   name: string;
   description: string;
   size: number;
+  _id: string;
 }
 
 @Component({
@@ -15,27 +17,36 @@ export class AppComponent implements OnInit  {
   properties: Property[] = [];
   property: Property = {} as Property;
 
-  ngOnInit(): void {}
+  constructor(private appService: AppService) {}
 
-  addProperty() {
-    if(this.editIndex != -1) {
-      this.properties[this.editIndex] = { ...this.property };
-    } else {
-      this.properties.push(this.property);
-    }
+  ngOnInit(): void {
+    this.getAllProperty();
+  }
 
-    this.editIndex = -1;
+  getAllProperty() {
+    this.appService.getAllProperties().subscribe((data: any) => {
+      this.properties = data.data
+    }, (err) => {
+      console.log(err);
+    })
+  }
+
+  submit() {
+   this.appService.createProperty(this.property).subscribe((data: any)=> {
+    console.log(data.message);
     this.property = {} as Property;
+    this.getAllProperty();
+   }, (err) => {
+    console.log(err)
+   })    
   }
 
-  editIndex: number = -1;
-  editProperty(index: number) {
-    this.editIndex = index;
-
-    this.property = { ...this.properties[index] };
-  }
-
-  deleteProperty(index: number) {
-    this.properties.splice(index, 1);
+  deleteProperty(id: string) {
+    this.appService.deleteProperty(id).subscribe((data: any) => {
+      console.log(data.message);
+      this.getAllProperty();
+    }, (err) => {
+      console.log(err);
+    })
   }
 }

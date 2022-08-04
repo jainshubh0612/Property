@@ -4,7 +4,7 @@
       <div class="font-weight-bold h2 mb-3 pb-3">
         Add Property
       </div>
-      <form #form="ngForm" (ngSubmit)="addProperty()" autocomplete="off">
+      <form #form="ngForm" autocomplete="off">
           <div class="form-group">
             <label class="font-weight-bold" for="name">Name</label>
             <input type="text" name="name" id="name" class="form-control" [(ngModel)]="property.name" required/>
@@ -21,7 +21,7 @@
             <p class="small">Size is in square meters</p>
           </div>
           <div class="d-flex justify-content-end">
-            <button type="submit"  class="btn btn-primary" [disabled]="!form.valid" (click)="addProperty()">{{ editIndex != -1 ? 'Edit' :' Add'  }}</button>
+            <button type="submit"  class="btn btn-primary" [disabled]="!form.valid" (click)="submit()">Add</button>
           </div>
       </form>
     </div>
@@ -43,10 +43,8 @@
             </p>
             <div class="d-flex justify-content-end">
               <div class="btn-group">
-                <div class="btn btn-sm btn-warning mr-2" (click)="editProperty(i)" >
-                  Edit
-                </div>
-                <div class="btn btn-sm btn-danger" (click)="deleteProperty(i)">
+                
+                <div class="btn btn-sm btn-danger" (click)="deleteProperty(property._id)">
                   Delete
                 </div>
               </div>
